@@ -114,7 +114,7 @@ export class BrainDumpPanel {
       </head>
       <body>
         <div class="toolbar">
-          <div class="title">🧠 Brain Dump to Code</div>
+          <div class="title">Brain Dump to Code</div>
           <label class="muted">Target Language:</label>
           <select id="language">
             <option ${defaultLanguage==='Python' ? 'selected' : ''}>Python</option>
