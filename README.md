@@ -1,4 +1,9 @@
+
+
 # Brain Dump to Code
+<p align="center">
+  <img src="./logo.png" alt="Brain Dump to Code Logo" width="200">
+</p>
 
 Turn your messy thoughts into clean, functional code with AI. This VS Code extension lets you write natural language instructions and generates runnable code in your chosen language. It can also insert the output directly into files on your machine.
 
