@@ -21,7 +21,11 @@ export class BrainDumpPanel {
       column,
       {
         enableScripts: true,
-        retainContextWhenHidden: true
+        retainContextWhenHidden: true,
+        localResourceRoots: [
+          vscode.Uri.joinPath(extensionUri, 'src'),
+          extensionUri
+        ]
       }
     );
 
@@ -32,7 +36,11 @@ export class BrainDumpPanel {
     this._panel = panel;
     this._extensionUri = extensionUri;
 
-    this._panel.webview.html = this._getHtml();
+    const logoUri = this._panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'src', 'logo.png')
+    );
+    const cspSource = this._panel.webview.cspSource;
+    this._panel.webview.html = this._getHtml(logoUri.toString(), cspSource);
 
     this._panel.webview.onDidReceiveMessage(async (message) => {
       if (message.command === 'generate') {
@@ -103,14 +111,14 @@ export class BrainDumpPanel {
     }
   }
 
-  private _getHtml() {
+  private _getHtml(logoSrc: string, cspSource: string) {
     const defaultLanguage = this._inferDefaultLanguage();
     return `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8" />
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; script-src 'unsafe-inline';" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${cspSource} https: data:; style-src 'unsafe-inline'; script-src 'unsafe-inline';" />
         <style>
           :root {
             --bg: #1e1e1e;
@@ -126,7 +134,8 @@ export class BrainDumpPanel {
           html, body { height: 100%; }
           body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background: var(--bg); color: var(--text); }
           .toolbar { display: flex; gap: 8px; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); background: var(--panel); position: sticky; top: 0; z-index: 1; }
-          .toolbar .title { font-size: 16px; font-weight: 600; margin-right: auto; }
+          .toolbar .title { font-size: 16px; font-weight: 600; margin-right: auto; display: inline-flex; align-items: center; gap: 8px; }
+          .toolbar .logo { height: 22px; width: auto; display: inline-block; }
           select, input[type="checkbox"] { background: var(--btn); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; }
           .checkbox { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
           .btn { background: var(--btn); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; cursor: pointer; }
@@ -150,7 +159,7 @@ export class BrainDumpPanel {
       </head>
       <body>
         <div class="toolbar">
-          <div class="title">Brain Dump to Code</div>
+          <div class="title"><img class="logo" src="${logoSrc}" alt="logo" /> Brain Dump to Code</div>
           <label class="muted">Target Language:</label>
           <select id="language">
             <option ${defaultLanguage==='Python' ? 'selected' : ''}>Python</option>
