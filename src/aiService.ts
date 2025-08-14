@@ -64,7 +64,6 @@ export async function getCodeFromBrainDump(text: string, language: string): Prom
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       const is429 = msg.includes('429') || msg.toLowerCase().includes('quota');
-      // Only try fallback model if the error was NOT quota-related
       if (!is429) {
         const secondary = await generateWithRetry(fallbackModel);
         return secondary || '// No code generated.';
