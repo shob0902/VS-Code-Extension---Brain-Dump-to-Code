@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { TextDecoder, TextEncoder } from 'util';
 import { getCodeFromBrainDump } from './aiService';
 
 export class BrainDumpPanel {
@@ -42,6 +43,8 @@ export class BrainDumpPanel {
         }
       } else if (message.command === 'insert') {
         await this._insertIntoActiveEditor(message.code ?? '');
+      } else if (message.command === 'insertToFile') {
+        await this._insertIntoChosenFile(message.code ?? '');
       }
     });
 
@@ -65,6 +68,39 @@ export class BrainDumpPanel {
       }
     });
     void vscode.window.showInformationMessage('Code inserted into current file.');
+  }
+
+  private async _insertIntoChosenFile(code: string) {
+    if (!code) {
+      void vscode.window.showWarningMessage('No generated code to insert.');
+      return;
+    }
+    const picked = await vscode.window.showOpenDialog({
+      canSelectMany: false,
+      canSelectFiles: true,
+      canSelectFolders: false,
+      openLabel: 'Select file to insert code into'
+    });
+    if (!picked || picked.length === 0) {
+      return;
+    }
+    const target = picked[0];
+    try {
+      let existing = '';
+      try {
+        const bytes = await vscode.workspace.fs.readFile(target);
+        existing = new TextDecoder('utf-8').decode(bytes);
+      } catch {
+        existing = '';
+      }
+      const prefix = existing.length > 0 && !existing.endsWith('\n') ? '\n' : existing.length > 0 ? '' : '';
+      const newContent = `${existing}${prefix}${code}${code.endsWith('\n') ? '' : '\n'}`;
+      await vscode.workspace.fs.writeFile(target, new TextEncoder().encode(newContent));
+      void vscode.window.showInformationMessage(`Code inserted into: ${target.fsPath}`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      void vscode.window.showErrorMessage(`Failed to insert code: ${msg}`);
+    }
   }
 
   private _getHtml() {
@@ -193,7 +229,7 @@ export class BrainDumpPanel {
           insertBtn.addEventListener('click', () => {
             const code = outputEl.textContent || '';
             if (!code) return;
-            vscode.postMessage({ command: 'insert', code });
+            vscode.postMessage({ command: 'insertToFile', code });
           });
           inputEl.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { doGenerate(); }
