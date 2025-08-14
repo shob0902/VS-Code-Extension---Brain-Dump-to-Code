@@ -8,7 +8,7 @@
       "runtimeExecutable": "code",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "env": {
-        "GEMINI_API_KEY": "AIzaSyAD65uz84dUbyEO0-mhxCEY0dBNN-YS0r0"
+        "GEMINI_API_KEY": "YOUR_GEMINI_API_KEY"
       }
     }
   ]
