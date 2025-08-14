@@ -1,0 +1,40 @@
+{
+  "name": "brain-dump-to-code",
+  "displayName": "Brain Dump to Code",
+  "description": "Turn your messy thoughts into clean, functional code with AI.",
+  "version": "0.0.1",
+  "publisher": "your-publisher-id",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:brainDumpToCode.start"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "brainDumpToCode.start",
+        "title": "Brain Dump to Code"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "build": "tsc",
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.0.0"
+  }
+}
+
+
