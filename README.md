@@ -8,6 +8,12 @@ Turn your messy thoughts into clean, functional code with AI. This VS Code exten
 
 > **Important:** You must **use your own Gemini API key**. The extension does **not** provide or bundle any API keys.
 
+<p align="center">
+  <video width="600" controls>
+    <source src="vid.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</p>
 ---
 
 ## ✨ Features
