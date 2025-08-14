@@ -9,10 +9,11 @@ Turn your messy thoughts into clean, functional code with AI. This VS Code exten
 > **Important:** You must **use your own Gemini API key**. The extension does **not** provide or bundle any API keys.
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=VIDEO_ID">
-    <img src="https://img.youtube.com/vi/VIDEO_ID/0.jpg" alt="Watch the Demo" width="600">
+  <a href="https://youtu.be/07NTWlQFpDs">
+    <img src="https://img.youtube.com/vi/07NTWlQFpDs/0.jpg" alt="Watch the Demo" width="600">
   </a>
 </p>
+
 ---
 
 ## ✨ Features
